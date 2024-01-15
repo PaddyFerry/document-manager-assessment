@@ -3,6 +3,8 @@ import urllib.parse
 
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import action
@@ -12,13 +14,29 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+
 from propylon_document_manager.files.models import File
 
 from .serializers import FileSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(
+        description="Return all uploaded files belonging to the user. Filter by location"
+                    ", file_name, extension, and/or content_md5.",
+        parameters=[
+          OpenApiParameter("location", OpenApiTypes.STR, OpenApiParameter.QUERY),
+          OpenApiParameter("file_name", OpenApiTypes.STR, OpenApiParameter.QUERY),
+          OpenApiParameter("extension", OpenApiTypes.STR, OpenApiParameter.QUERY),
+          OpenApiParameter("content_md5", OpenApiTypes.STR, OpenApiParameter.QUERY),
+        ]
+    ),
+    create=extend_schema(description="Upload a new file to the user."),
+    retrieve=extend_schema(description="Get information about a specific file."),
+    download=extend_schema(description="Download file of given id.")
+)
 class FileViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet, CreateModelMixin):
-    authentication_classes = [TokenAuthentication, SessionAuthentication]
+    authentication_classes = [TokenAuthentication]
     parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [IsAuthenticated]
     serializer_class = FileSerializer
@@ -43,7 +61,8 @@ class FileViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet, CreateMode
 
     @action(methods=["get"], detail=True, name="download", permission_classes=[IsAuthenticated])
     def download(self, *args, **kwargs):
-        file = File.objects.filter(owner=self.request.user, id=kwargs["id"]).first()
+        queryset = File.objects.filter(owner=self.request.user)
+        file = get_object_or_404(queryset, pk=kwargs["id"])
         open_file = open(file.file.path, "rb")
         response = FileResponse(
             open_file,
@@ -80,7 +99,6 @@ class FileViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet, CreateMode
     def retrieve(self, request, *args, **kwargs):
         queryset = File.objects.filter(owner=self.request.user)
         file = get_object_or_404(queryset, pk=kwargs["id"])
-        # file = queryset.get_object_or_404(id=kwargs["id"])
         return Response(self.serializer_class(file).data)
 
 

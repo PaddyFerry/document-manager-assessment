@@ -24,7 +24,6 @@ urlpatterns = [
     path("accounts/", include("allauth.account.urls")),
     path("admin/", admin.site.urls),
     path("users/", include("propylon_document_manager.users.urls", namespace="users")),
-    # path("files/", include("propylon_document_manager.files.urls", namespace="files")),
 ]
 
 if settings.DEBUG:

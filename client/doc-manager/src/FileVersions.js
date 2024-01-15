@@ -21,7 +21,7 @@ function FileVersionsList(props) {
   return <Stack>{files}</Stack>
 }
 
-function FileUpload() {
+function FileUpload(props) {
     const [file, setFile] = useState()
 
   function handleChange(event) {
@@ -40,8 +40,7 @@ function FileUpload() {
             {
                 method: "POST",
                 headers: new Headers({
-                    Authorization: 'Token 17f914ca39030d6d0907f4d342c4627d1b17b038',
-                    // 'content-type': 'multipart/form-data'
+                    Authorization: `Token ${props.token}`,
                 }),
                 body: formData
             }
@@ -53,7 +52,7 @@ function FileUpload() {
           <form onSubmit={handleSubmit}>
               <h3>Upload file</h3>
               <input type="file" onChange={handleChange} />
-              <Button type="submit" variant="contained" >Upload</Button>
+              <button type="submit" variant="contained" >Upload</button>
           </form>
       </div>
   );
@@ -62,8 +61,7 @@ function FileUpload() {
 
 function FileVersions() {
     const [data, setData] = useState([]);
-  // console.log(data);
-  // console.log(window.location.pathname);
+    const userToken = "17f914ca39030d6d0907f4d342c4627d1b17b038"
 
   useEffect(() => {
     // fetch data
@@ -76,7 +74,7 @@ function FileVersions() {
                 method: "GET",
 
                 headers: new Headers({
-                    Authorization: 'Token 17f914ca39030d6d0907f4d342c4627d1b17b038',
+                    Authorization: `Token ${userToken}`,
     }),
             }
         )
@@ -91,7 +89,7 @@ function FileVersions() {
     <div>
         <h1>Current Folder: {window.location.pathname}</h1>
       <h2>Found {data.length} File Versions</h2>
-        <FileUpload></FileUpload>
+        <FileUpload token={userToken}></FileUpload>
       <div>
           <FileVersionsList file_versions={data} />
       </div>

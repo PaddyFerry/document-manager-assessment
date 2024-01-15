@@ -36,6 +36,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements,target=requirements \
     python -m pip install -r requirements/local.txt
 
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=requirements,target=requirements \
+    python -m pip install -r requirements/current.txt
+
 
 # Switch to the non-privileged user to run the application.
 USER appuser
@@ -50,5 +54,6 @@ CMD python manage.py migrate
 # Expose the port that the application listens on.
 EXPOSE 8001
 
+CMD python manage.py create_user
 # Run the application.
 CMD python manage.py runserver 0.0.0.0:8001
