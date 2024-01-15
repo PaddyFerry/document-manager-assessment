@@ -12,11 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from propylon_document_manager.users.forms import UserAdminChangeForm
 from propylon_document_manager.users.models import User
 from propylon_document_manager.users.tests.factories import UserFactory
-from propylon_document_manager.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from propylon_document_manager.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 

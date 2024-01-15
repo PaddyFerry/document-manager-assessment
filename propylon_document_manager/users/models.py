@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField, EmailField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from rest_framework.authtoken.models import Token
 
 from propylon_document_manager.users.managers import UserManager
 
@@ -26,10 +30,10 @@ class User(AbstractUser):
     objects = UserManager()
 
     def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
         return reverse("users:detail", kwargs={"pk": self.id})
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

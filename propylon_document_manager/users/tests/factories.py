@@ -1,9 +1,13 @@
 from collections.abc import Sequence
 from typing import Any
 
+import factory
 from django.contrib.auth import get_user_model
-from factory import Faker, post_generation
+from django.utils import timezone
+from factory import Faker, SubFactory, post_generation
 from factory.django import DjangoModelFactory
+
+from propylon_document_manager.files.models import File
 
 
 class UserFactory(DjangoModelFactory):
@@ -29,3 +33,13 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ["email"]
+
+
+class FileFactory(DjangoModelFactory):
+    file_name = Faker("name")
+    owner = SubFactory(UserFactory)
+    version_number = 1
+    created_at = factory.LazyFunction(timezone.now)
+
+    class Meta:
+        model = File

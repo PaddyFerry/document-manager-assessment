@@ -87,7 +87,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "propylon_document_manager.users",
     # Your stuff: custom apps go here
-    "propylon_document_manager.file_versions",
+    "propylon_document_manager.files",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -270,7 +270,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "propylon_document_manager.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
