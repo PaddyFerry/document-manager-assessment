@@ -6,7 +6,7 @@ run `docker build . --platform="linux/amd64" -t app`
 
 This will create a user for you with email `test@email.com` and password `123456`.
 
-run `docker run -p 8001:8001 -it app`
+run `docker run -u root -p 8001:8001 -it app`
 
 Grab your token with this curl
 ```
@@ -34,7 +34,8 @@ Run
 `npm start`
 
 You can go to http://localhost:3000
-You can upload/download files at whichever url you.
+You can upload/download files at whichever url you'd like. Uploading a file with the same same name and extension to 
+the same url will create the next version. 
 
 ## Requirements overview
 Stores files of any type and name 
@@ -51,6 +52,13 @@ Stores files of any type and name
 - Demonstrate functionality that allows a client to retrieve any given version of document using a endpoint that implements a Content Addressable Storage mechanism.
   - You can query `/api/files/` with `content_md5` which will give you any files that have the exact same content.
 
+## Things I'd like to add
+- Search by partial name
+- More validation on fields 
+- End to end tests
+- Actual deployment settings
+- Folder navigation on frontend 
+- A login/register page for the front end lol
 
 ___
 

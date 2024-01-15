@@ -52,6 +52,22 @@ class TestFileListView(APITestCase):
         assert uploaded_file.extension == "pdf"
         assert uploaded_file.content_md5 == md5
 
+    def test_create_file_version(self):
+        file = io.BytesIO(b"some data")
+        file.name = "test.pdf"
+        post_body = {"file": file, "location": "/test/"}
+        self.client.post("/api/files/", data=post_body)
+
+        file = io.BytesIO(b"some data")
+        file.name = "test.pdf"
+        post_body = {"file": file, "location": "/test/"}
+
+        response = self.client.post("/api/files/", data=post_body)
+        print(response)
+        uploaded_file_version_2 = File.objects.get(id=response.data["id"])
+        assert response.status_code == 201
+        assert uploaded_file_version_2.extension == "pdf"
+
     def test_user_cant_access_other_files(self):
         user1 = UserFactory()
         user2 = UserFactory()

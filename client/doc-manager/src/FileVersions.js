@@ -7,18 +7,17 @@ import Stack from '@mui/material/Stack';
 
 function FileVersionsList(props) {
   const file_versions = props.file_versions;
-  let files = file_versions.map((file_version) => (
+  return (file_versions.map((file_version) => (
 
-    <Box className="file-version" key={file_version.id}>
+    <div className="file-version" key={file_version.id}>
 
       <h2>{file_version.file_name + "." + file_version.extension}</h2>
       <p>
         Version: {file_version.version_number}<br/>
-          <Button variant="contained" href={`http://localhost:8001/api/files/${file_version.id}/download/`}>Download</Button>
+          <button href={`http://localhost:8001/api/files/${file_version.id}/download/`}>Download</button>
       </p>
-    </Box>
-  ));
-  return <Stack>{files}</Stack>
+    </div>
+  )));
 }
 
 function FileUpload(props) {
@@ -34,7 +33,7 @@ function FileUpload(props) {
         const formData = new FormData();
         formData.append('file', file);
         console.log(file.name)
-        // formData.append('fileName', file.name);
+
         formData.append('location', window.location.pathname || "/");
         fetch(url,
             {
@@ -44,7 +43,8 @@ function FileUpload(props) {
                 }),
                 body: formData
             }
-        );
+        ).then(_ => window.location.reload(window.location));
+
   }
 
   return (

@@ -101,5 +101,11 @@ class FileViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet, CreateMode
         file = get_object_or_404(queryset, pk=kwargs["id"])
         return Response(self.serializer_class(file).data)
 
+    def create(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(data=request.data)
+        # size = self.request.data.["file"].size
+        # import pdb; pdb.set_trace()
+        return super().create(request, *args, **kwargs)
+
 
 file_list_view = FileViewSet.as_view({"get": "list"})

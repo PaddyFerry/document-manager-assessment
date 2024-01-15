@@ -54,6 +54,11 @@ CMD python manage.py migrate
 # Expose the port that the application listens on.
 EXPOSE 8001
 
+CMD mkdir propylon_document_manager/media
+CMD mkdir propylon_document_manager/media/storage
+CMD chmod 777 -R .
+CMD echo "HELLO"
+
 CMD python manage.py create_user
 # Run the application.
 CMD python manage.py runserver 0.0.0.0:8001
