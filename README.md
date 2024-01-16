@@ -18,10 +18,32 @@ curl --location 'http://localhost:8001/auth-token/' \
 }'
 ```
 
-1. Go to http://localhost:8001/api/docs/
+1. Go to http://localhost:8001/api/docs/ (some documentation added)
 2. Click "Authorize" button in the top right
 3. Enter your token from the above curl command and make sure you prefix it with "Token "
 4. Play around with endpoints
+5. You could also use Postman/curl for testing
+
+- `GET /api/files/`
+  - This will get a list of all files for the authed user
+  - This is queryable with `file_name`, `content_md5`, `location`, and/or `extension`
+- `POST /api/files/`
+  - Body requires `file`, `location` is optional and defaults to`/`
+  - The file will be stored locally on server. This could be swapped out for something like an S3 bucket
+  - File will be hashed with md5
+  - File will belong to the authed user
+  - A file will become increment in version when the same filename and extension are uploaded to the same location
+- `GET /api/files/{id}/`
+  - This will give a detail view on the file
+  - This id is currently just an incrementing integer but probably should be switched to uuid or the like
+  - These fields could be reduced to a subset of what they are, but I am leaving them as is for now for convenience
+- `GET /api/files/{id}/compare/{file_version}/`
+  - This will compare a file against another and tell you if they are the same.
+  - This logic could be improved for each specific file type but this simple comparison should work for all file types
+- `GET /api/files/{id}/download/`
+  - This will download the file id if it belongs to the authed user otherwise it returns a 404
+- `GET /api/files/{id}/versions/`
+  - This will return all versions of the given file `id`
 
 
 ## UI
@@ -36,6 +58,8 @@ Run
 You can go to http://localhost:3000
 You can upload/download files at whichever url you'd like. Uploading a file with the same same name and extension to 
 the same url will create the next version. 
+
+If the above commands don't work, you can run the commands from the original readme
 
 ## Requirements overview
 Stores files of any type and name 
@@ -74,11 +98,12 @@ The Propylon Document Management Technical Assessment is a simple (and incomplet
 5. `$ direnv allow .`
 6. `$ pipenv install -r requirements/local.txt`.  If Python 3.11 is not the default Python version on your system you may need to explicitly create the virtual environment (`$ python3.11 -m venv .venv`) prior to running the install command. 
 7. `$ pipenv run python manage.py migrate` to create the database.
-8. `$ pipenv run python manage.py load_file_fixtures` to create the fixture file versions.
-9. `$ pipenv run python manage.py runserver 0.0.0.0:8001` to start the development server on port 8001.
-10. Navigate to the client/doc-manager directory.
-11. `$ npm install` to install the dependencies.
-12. `$ npm start` to start the React development server.
+8. `$ pipenv run python manage.py create_user` Creates a test user 
+9. `$ pipenv run python manage.py load_file_fixtures`
+10. `$ pipenv run python manage.py runserver 0.0.0.0:8001` to start the development server on port 8001. 
+11. Navigate to the client/doc-manager directory.
+12. `$ npm install` to install the dependencies.
+13. `$ npm start` to start the React development server.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)

@@ -63,7 +63,6 @@ class TestFileListView(APITestCase):
         post_body = {"file": file, "location": "/test/"}
 
         response = self.client.post("/api/files/", data=post_body)
-        print(response)
         uploaded_file_version_2 = File.objects.get(id=response.data["id"])
         assert response.status_code == 201
         assert uploaded_file_version_2.extension == "pdf"
