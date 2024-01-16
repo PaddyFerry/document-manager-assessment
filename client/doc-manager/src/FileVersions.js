@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import "./FileVersions.css";
-import {ChangeEvent} from "react";
-import {Box, Button} from "@mui/material";
-import Stack from '@mui/material/Stack';
 
 function FileVersionsList(props) {
   const file_versions = props.file_versions;
