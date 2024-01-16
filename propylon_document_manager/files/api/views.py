@@ -4,16 +4,15 @@ import urllib.parse
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
 
 from propylon_document_manager.files.models import File
 
@@ -23,17 +22,17 @@ from .serializers import FileSerializer
 @extend_schema_view(
     list=extend_schema(
         description="Return all uploaded files belonging to the user. Filter by location"
-                    ", file_name, extension, and/or content_md5.",
+        ", file_name, extension, and/or content_md5.",
         parameters=[
-          OpenApiParameter("location", OpenApiTypes.STR, OpenApiParameter.QUERY),
-          OpenApiParameter("file_name", OpenApiTypes.STR, OpenApiParameter.QUERY),
-          OpenApiParameter("extension", OpenApiTypes.STR, OpenApiParameter.QUERY),
-          OpenApiParameter("content_md5", OpenApiTypes.STR, OpenApiParameter.QUERY),
-        ]
+            OpenApiParameter("location", OpenApiTypes.STR, OpenApiParameter.QUERY),
+            OpenApiParameter("file_name", OpenApiTypes.STR, OpenApiParameter.QUERY),
+            OpenApiParameter("extension", OpenApiTypes.STR, OpenApiParameter.QUERY),
+            OpenApiParameter("content_md5", OpenApiTypes.STR, OpenApiParameter.QUERY),
+        ],
     ),
     create=extend_schema(description="Upload a new file to the user."),
     retrieve=extend_schema(description="Get information about a specific file."),
-    download=extend_schema(description="Download file of given id.")
+    download=extend_schema(description="Download file of given id."),
 )
 class FileViewSet(RetrieveModelMixin, ListModelMixin, GenericViewSet, CreateModelMixin):
     authentication_classes = [TokenAuthentication]

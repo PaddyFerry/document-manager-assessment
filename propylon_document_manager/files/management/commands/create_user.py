@@ -4,7 +4,7 @@ from propylon_document_manager.users.models import User
 
 
 class Command(BaseCommand):
-    help = 'Create user'
+    help = "Create user"
 
     def handle(self, *args, **kwargs):
         User.objects.get_or_create(
